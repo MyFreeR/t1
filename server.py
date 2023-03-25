@@ -2,10 +2,10 @@
 from flask import Flask, request
 import logging
 
-# библиотека, которая нам понадобится для работы с JSON 
+# библиотека, которая нам понадобится для работы с JSON
 import json
 
-# создаем приложение 
+# создаем приложение
 # мы передаем __name__, в нем содержится информация, в каком модуле мы находимся.
 # В данном случае там содержится '__main__', так как мы обращаемся к переменной из запущенного модуля.
 # если бы такое обращение, например, произошло внутри модуля logging, то мы бы получили 'logging'
@@ -27,7 +27,7 @@ sessionStorage = {}
 # Функция получает тело запроса и возвращает ответ.
 # Внутри функции доступен request.json - это JSON, который отправила нам Алиса в запросе POST
 def main():
-    logging.info('Request: %r', request.json)
+    logging.info(f'Request: {request.json!r}')
 
     # Начинаем формировать ответ, согласно документации
     # мы собираем словарь, который потом при помощи библиотеки json преобразуем в JSON и отдадим Алисе
@@ -62,7 +62,8 @@ def handle_dialog(req, res):
                 "Не хочу.",
                 "Не буду.",
                 "Отстань!",
-            ]
+            ],
+            'to_buy': 'слон'
         }
         # Заполняем текст ответа
         res['response']['text'] = 'Привет! Купи слона!'
@@ -84,15 +85,24 @@ def handle_dialog(req, res):
         'я куплю'
     ]:
         # Пользователь согласился, прощаемся.
-        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
-        res['response']['end_session'] = True
+        if sessionStorage[user_id]['to_buy'] == 'слон':
+            res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!\nА теперь купи кролика'
+            sessionStorage[user_id]['to_buy'] = 'кролик'
+        else:
+            res['response']['text'] = 'Кролика можно найти на Яндекс.Маркете!\nА теперь купи слона'
+            sessionStorage[user_id]['to_buy'] = 'слон'
+        sessionStorage[user_id]['to_buy'] = [
+            "Не хочу.",
+            "Не буду.",
+            "Отстань!",
+        ]
+        res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Если нет, то убеждаем его купить слона!
     res['response']['text'] = \
-        f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
+        f"Все говорят '{req['request']['original_utterance']}', а ты купи {sessionStorage[user_id]['to_buy']}а!"
     res['response']['buttons'] = get_suggests(user_id)
-
 
 # Функция возвращает две подсказки для ответа.
 def get_suggests(user_id):
@@ -113,7 +123,7 @@ def get_suggests(user_id):
     if len(suggests) < 2:
         suggests.append({
             "title": "Ладно",
-            "url": "https://market.yandex.ru/search?text=слон",
+            "url": f"https://market.yandex.ru/search?text={sessionStorage[user_id]['to_buy']}",
             "hide": True
         })
 

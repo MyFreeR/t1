@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "locale": "ru-RU",
+    "timezone": "UTC",
+    "client_id": "ru.yandex.searchplugin/7.16 (none none; android 4.4.2)",
+    "interfaces": {
+      "screen": {},
+      "payments": {},
+      "account_linking": {}
+    }
+  },
+  "session": {
+    "message_id": 1,
+    "session_id": "b3ea219f-5e91-45c0-ab01-da4490126774",
+    "skill_id": "15395d90-da8f-4a91-9fea-50bcb54d915d",
+    "user": {
+      "user_id": "BA0702D0F0687BC711F1C3310132A3DE9D1E92EB8C58C3E674C1711255AAB2DB"
+    },
+    "application": {
+      "application_id": "0105B8F96CDDB1E5A4CAB11C717825BA5FB595902E747F47A57AA5A5078544AB"
+    },
+    "user_id": "0105B8F96CDDB1E5A4CAB11C717825BA5FB595902E747F47A57AA5A5078544AB",
+    "new": false
+  },
+  "request": {
+    "command": "я покупаю",
+    "original_utterance": "я покупаю",
+    "nlu": {
+      "tokens": [
+        "не",
+        "хочу"
+      ],
+      "entities": [],
+      "intents": {}
+    },
+    "markup": {
+      "dangerous_context": false
+    },
+    "type": "SimpleUtterance"
+  },
+  "state": {
+    "session": {},
+    "user": {},
+    "application": {}
+  },
+  "version": "1.0"
+}
